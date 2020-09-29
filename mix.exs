@@ -34,7 +34,7 @@ defmodule HabCtl.MixProject do
   defp deps do
     [
       {:distillery, "~> 2.1"},
-      {:bootleg, "~> 0.12"},
+      {:bootleg, git: "https://github.com/davidkern/bootleg.git", branch: "dkern-forked"},
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
