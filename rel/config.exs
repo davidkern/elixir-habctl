@@ -29,7 +29,6 @@ environment :dev do
   # It is recommended that you build with MIX_ENV=prod and pass
   # the --env flag to Distillery explicitly if you want to use
   # dev mode.
-  set server: true
   set dev_mode: true
   set include_erts: false
   set cookie: :"fwJ2=QL_20.uajocBl.h{}3~{M|wdFw!@@G]/z{7?K{8>W>LTt7![fvm`c=26JRC"
