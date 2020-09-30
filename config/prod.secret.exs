@@ -11,7 +11,7 @@ config :habctl, HabCtl.Repo,
   url: database_url,
   pool_size: 10
 
-secret_key_base = "notverysecret"
+secret_key_base = "NUIPAWHJniodsnwqe89Njq3oaLIjasdh32up9ashdnjkln23z9o8ealkjndsnuiHIUYGY3"
 
 config :habctl, HabCtlWeb.Endpoint,
   http: [
