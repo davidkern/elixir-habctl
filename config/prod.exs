@@ -10,8 +10,11 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :habctl, HabCtlWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "10.42.0.1", port: 4000],
+  server: true,
+  root: ".",
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  version: Application.spec(:habctl, :vsn)
 
 # Do not print debug messages in production
 config :logger, level: :info
