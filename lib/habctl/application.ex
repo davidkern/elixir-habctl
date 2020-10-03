@@ -14,7 +14,9 @@ defmodule HabCtl.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: HabCtl.PubSub},
       # Start the Endpoint (http/https)
-      HabCtlWeb.Endpoint
+      HabCtlWeb.Endpoint,
+      # Start board metrics supervisor
+      HabCtl.Board
       # Start a worker by calling: HabCtl.Worker.start_link(arg)
       # {HabCtl.Worker, arg}
     ]

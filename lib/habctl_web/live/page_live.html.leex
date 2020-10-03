@@ -1,5 +1,12 @@
 <section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
+  <table>
+    <tr>
+      <th>CPU Temperature [C]</th>
+      <td><%= @cpu_temp %></td>
+    </tr>
+  </table>
+
+  <!--h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
   <p>Peace of mind from prototype to production</p>
 
   <form phx-change="suggest" phx-submit="search">
@@ -44,5 +51,5 @@
         <a href="https://elixir-slackin.herokuapp.com/">Elixir on Slack</a>
       </li>
     </ul>
-  </article>
+  </article-->
 </section>
