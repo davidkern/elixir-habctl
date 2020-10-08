@@ -8,6 +8,7 @@ defmodule HabCtlWeb.PageLive do
     {:ok, assign(
       socket,
       board_metrics: HabCtl.Board.default_metrics(),
+      energy_metrics: HabCtl.Energy.default_metrics(),
       query: "",
       results: %{})}
   end

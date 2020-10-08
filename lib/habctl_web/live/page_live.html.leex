@@ -1,4 +1,25 @@
 <section class="phx-hero">
+  <h2>Hab Energy</h2>
+  <table>
+    <tr>
+      <th>Stored Energy [W·hr]
+      <td><%= @energy_metrics.stored_energy %>
+    </tr>
+    <tr>
+      <th>Battery Power [W]
+      <td><%= @energy_metrics.power %>
+    </tr>
+    <tr>
+      <th>Battery Voltage [V]
+      <td><%= @energy_metrics.voltage %>
+    </tr>
+    <tr>
+      <th>Battery Current [A]
+      <td><%= @energy_metrics.current %>
+    </tr>
+  </table>
+
+  <h2>Hab Computer</h2>
   <table>
     <tr>
       <th>CPU Temperature [C]</th>

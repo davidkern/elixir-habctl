@@ -33,7 +33,7 @@ defmodule HabCtl.Board do
   end
 
   @doc """
-  Gets the default (empty) metrics map.
+  Gets the default (empty) metrics.
   """
   def default_metrics do
     %Board{}.metrics
