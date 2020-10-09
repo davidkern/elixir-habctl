@@ -65,6 +65,11 @@ defmodule HabCtl.Energy do
       current: acc.current
     }
 
+    broadcast(metrics)
     {:noreply, %Energy{state | metrics: metrics}}
+  end
+
+  defp broadcast(data) do
+    Phoenix.PubSub.broadcast(HabCtl.PubSub, @topic, {__MODULE__, data})
   end
 end
