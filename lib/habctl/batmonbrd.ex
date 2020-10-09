@@ -1,5 +1,4 @@
 defmodule HabCtl.BatMonBrd do
-  alias __MODULE__
   use GenServer
 
   @topic inspect(__MODULE__)
@@ -34,8 +33,16 @@ defmodule HabCtl.BatMonBrd do
 
   @impl true
   def handle_info({:circuits_uart, _, data}, uart) do
-    IO.inspect(data)
-    broadcast(data)
+    parsed_data = Enum.map(Jason.decode!(data), fn(e) ->
+      %{
+        timestamp: Map.get(e, "ts"),
+        voltage: Map.get(e, "voltage"),
+        current: Map.get(e, "current"),
+        stored_energy: Map.get(e, "soc")
+      }
+    end)
+
+    broadcast(parsed_data)
     {:noreply, uart}
   end
 

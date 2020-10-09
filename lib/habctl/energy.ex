@@ -38,9 +38,33 @@ defmodule HabCtl.Energy do
   end
 
   ### Server
+  @impl true
   def init(:ok) do
+    HabCtl.BatMonBrd.subscribe()
     state = %Energy{}
 
     {:ok, state}
+  end
+
+  @impl true
+  def handle_info({HabCtl.BatMonBrd, data}, state) do
+    acc = Enum.reduce(data, fn(x, acc) ->
+      %{
+        voltage: acc.voltage + x.voltage,
+        current: acc.current + x.current,
+        stored_energy: acc.stored_energy + x.stored_energy
+      }
+    end)
+
+    count = Enum.count(data)
+
+    metrics = %{
+      stored_energy: acc.stored_energy,
+      power: acc.voltage * acc.current / count,
+      voltage: acc.voltage / count,
+      current: acc.current
+    }
+
+    {:noreply, %Energy{state | metrics: metrics}}
   end
 end
