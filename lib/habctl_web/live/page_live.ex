@@ -17,7 +17,7 @@ defmodule HabCtlWeb.PageLive do
   def to_hundredths(n) do
     case n do
       nil -> ""
-      _ -> :io.format("~.2f", [n])
+      _ -> :erlang.float_to_binary(n, [decimals: 2])
     end
   end
 
