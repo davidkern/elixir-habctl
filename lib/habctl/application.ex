@@ -15,8 +15,12 @@ defmodule HabCtl.Application do
       {Phoenix.PubSub, name: HabCtl.PubSub},
       # Start the Endpoint (http/https)
       HabCtlWeb.Endpoint,
-      # Start board metrics supervisor
-      HabCtl.Board
+      # Start board metrics system
+      HabCtl.Board,
+      # Start battery monitor board listener
+      HabCtl.BatMonBrd,
+      # Start energy monitoring system
+      HabCtl.Energy,
       # Start a worker by calling: HabCtl.Worker.start_link(arg)
       # {HabCtl.Worker, arg}
     ]
