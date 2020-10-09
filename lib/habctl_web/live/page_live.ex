@@ -14,6 +14,13 @@ defmodule HabCtlWeb.PageLive do
       results: %{})}
   end
 
+  def to_hundredths(n) do
+    case n do
+      nil -> ""
+      _ -> :io.format("~.2f", [n])
+    end
+  end
+
   @impl true
   def handle_info({HabCtl.Board, board_metrics}, socket) do
     {:noreply, assign(socket, board_metrics: board_metrics)}
@@ -21,6 +28,13 @@ defmodule HabCtlWeb.PageLive do
 
   @impl true
   def handle_info({HabCtl.Energy, energy_metrics}, socket) do
-    {:noreply, assign(socket, energy_metrics: energy_metrics)}
+    formatted_metrics = %{
+      stored_energy: to_hundredths(energy_metrics.stored_energy),
+      power: to_hundredths(energy_metrics.power),
+      voltage: to_hundredths(energy_metrics.voltage),
+      current: to_hundredths(energy_metrics.current)
+    }
+
+    {:noreply, assign(socket, energy_metrics: formatted_metrics)}
   end
 end
