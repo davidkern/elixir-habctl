@@ -4,13 +4,12 @@ defmodule HabCtlWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     HabCtl.Board.subscribe()
-    HabCtl.BatMonBrd.subscribe()
+    HabCtl.Energy.subscribe()
 
     {:ok, assign(
       socket,
       board_metrics: HabCtl.Board.default_metrics(),
       energy_metrics: HabCtl.Energy.default_metrics(),
-      batmonbrd: "",
       query: "",
       results: %{})}
   end
@@ -21,7 +20,7 @@ defmodule HabCtlWeb.PageLive do
   end
 
   @impl true
-  def handle_info({HabCtl.BatMonBrd, data}, socket) do
-    {:noreply, assign(socket, batmonbrd: data)}
+  def handle_info({HabCtl.Energy, energy_metrics}, socket) do
+    {:noreply, assign(socket, energy_metrics: energy_metrics)}
   end
 end
