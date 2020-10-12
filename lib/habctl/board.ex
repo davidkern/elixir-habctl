@@ -7,9 +7,7 @@ defmodule HabCtl.Board do
   @path_load_average "/proc/loadavg"
 
   defstruct [
-    configuration: %{
-      cpu_temp_path: nil
-    },
+    cpu_temp_stream: nil,
     metrics: %{
       cpu_temp: nil,
       load_average: "",
@@ -44,9 +42,7 @@ defmodule HabCtl.Board do
   @impl true
   def init(:ok) do
     board = %Board{
-      configuration: %{
-        cpu_temp_path: find_cpu_temp_file()
-      }
+      cpu_temp_stream: board_temperature(),
     }
 
     Process.send_after(self(), :tick, @tick_period)
@@ -68,12 +64,7 @@ defmodule HabCtl.Board do
 
   defp update_metrics(state) do
     %{
-      cpu_temp:
-        if state.configuration.cpu_temp_path do
-          with {:ok, content} <- File.read(state.configuration.cpu_temp_path) do
-            content |> String.trim() |> String.to_integer() |> Kernel./(1000)
-          end
-        end,
+      cpu_temp: HabCtl.Enum.take_one(state.cpu_temp_stream),
 
       load_average:
         with {:ok, content} <- File.read(@path_load_average) do
@@ -86,9 +77,43 @@ defmodule HabCtl.Board do
     Phoenix.PubSub.broadcast(HabCtl.PubSub, @topic, {__MODULE__, board_metrics})
   end
 
-  defp find_cpu_temp_file() do
-    Path.wildcard("/sys/class/thermal/thermal_zone*") |>
-    Enum.find(fn(p) -> {:ok, "x86_pkg_temp\n"} == File.read(Path.join(p, "type")) end) |>
-    Path.join("temp")
+  ### Streams
+
+  defp board_temperature_path(
+    name,
+    search_path
+  ) do
+    search_paths = Path.wildcard(search_path)
+    finder = fn(p) -> {:ok, "#{name}\n"} == File.read(Path.join(p, "type")) end
+    case Enum.find(search_paths, finder) do
+      nil -> {:error, :not_found}
+      found -> {:ok, Path.join(found, "temp")}
+    end
+  end
+
+  defp read_board_temperature(path) do
+    with {:ok, raw} <- File.read(path) do
+      raw
+      |> String.trim()
+      |> String.to_integer()
+      |> Kernel./(1000)
+    end
+  end
+
+  @doc """
+  Returns a stream of temperature data from /sys/class/thermal matching
+  the provided name.
+  """
+  def board_temperature(
+    name \\ "x86_pkg_temp",
+    search_path \\ "/sys/class/thermal/thermal_zone*"
+  ) do
+    with {:ok, path} <- board_temperature_path(name, search_path) do
+      Stream.resource(
+        fn -> path end,
+        fn path -> {[read_board_temperature(path)], path} end,
+        fn value -> value end
+      )
+    end
   end
 end
