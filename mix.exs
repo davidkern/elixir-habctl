@@ -49,7 +49,8 @@ defmodule HabCtl.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.0"},
-      {:circuits_uart, "~> 1.4.2"}
+      {:circuits_uart, "~> 1.4.2"},
+      {:contex, "~> 0.3.0"}
     ]
   end
 

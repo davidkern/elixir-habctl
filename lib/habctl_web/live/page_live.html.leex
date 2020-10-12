@@ -7,7 +7,10 @@
     </tr>
     <tr>
       <th>Battery Power [W]</th>
-      <td><%= @energy_metrics.power %></td>
+      <td>
+        <%= @energy_metrics.power %>
+        <%= @power_plot %>
+      </td>
     </tr>
     <tr>
       <th>Battery Voltage [V]</th>
@@ -23,7 +26,10 @@
   <table>
     <tr>
       <th>CPU Temperature [C]</th>
-      <td><%= @board_metrics.cpu_temp %></td>
+      <td>
+        <%= @board_metrics.cpu_temp %>
+        <%= @cpu_temp_plot %>
+      </td>
     </tr>
     <tr>
       <th>Load Average</th>
