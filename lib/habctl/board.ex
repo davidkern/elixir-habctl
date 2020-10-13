@@ -19,8 +19,8 @@ defmodule HabCtl.Board do
   @doc """
   Starts the Board monitoring server.
   """
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, :ok, opts)
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   @doc """
@@ -30,11 +30,14 @@ defmodule HabCtl.Board do
     Phoenix.PubSub.subscribe(HabCtl.PubSub, @topic, link: true)
   end
 
-  @doc """
-  Gets the default (empty) metrics.
-  """
-  def default_metrics do
-    %Board{}.metrics
+  def get() do
+    GenServer.call(__MODULE__, :get_metrics)
+  end
+
+  def get_and_subscribe do
+    metrics = get()
+    subscribe()
+    metrics
   end
 
   ### Server
@@ -64,7 +67,7 @@ defmodule HabCtl.Board do
 
   defp update_metrics(state) do
     %{
-      cpu_temp: HabCtl.Enum.take_one(state.cpu_temp_stream),
+      cpu_temp: HabCtl.Pipe.take_one(state.cpu_temp_stream),
 
       load_average:
         with {:ok, content} <- File.read(@path_load_average) do
